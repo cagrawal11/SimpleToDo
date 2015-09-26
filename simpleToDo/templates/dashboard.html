@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SimpleToDo</title>
+  <link rel="stylesheet" href="style.css"> 
+    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="../static/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="../static/js/jquery-2.1.4.min.js"></script>
+	<script src="../static/js/bootstrap.min.js"></script>
+	<!-- For datepicker-->
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/> 
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> 
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+	<script type="text/javascript">
+	$(document).ready(function(){ $('#datepicker').datepicker(); });
+	</script>
+</head>
+
+<body>
+	<!-- Heading -->
+	<div class="container-fluid">
+		<div class="well">	
+			<div class="row">
+				<h2 class="col-md-6">SimpleToDo</h2>
+				<p class="col-md-3">Welcome! {{user}}</p>
+				<div class="col-xs-3">
+					<a href={% url 'logout' %}><button class="btn btn-primary pull-right">Logout</button></a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Add Task form-->
+	<div class="container">
+		<div class="pull-right">
+			<form action="addTask" method="POST">
+			{%csrf_token%}
+			<div class="form-group">
+				<!--<div class="input-group">-->
+					<input type="text" name="task_name" placeholder="Task Name" required>
+					<input type="text" name="task_description" placeholder="Add task" required>
+					<input type="text" id="datepicker" name="due_date" placeholder="Due date" autocomplete='off' required>
+					<button class="btn btn-primary">Add</button>
+				<!--</div>-->
+			</div>
+		</form>			
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="well">
+			<table class="table table-hover table-bordered">
+				<tr>
+					<td><strong>Sr no.</strong></td>
+					<!--<td><strong>Created</strong></td>-->
+					<td><strong>Task</strong></td>
+					<td><strong>Description</strong></td>
+					<td><strong>Due on</strong></td>
+				</tr>
+				{% if allTasks %}
+					{% for tasks in allTasks %}
+					<tr>
+						<td class="col-xs-2">{{forloop.counter}}</td>
+						<!--<td class="col-xs-2">{{tasks.task_created | date:" D d M Y"}}</td>-->
+						<td class="col-xs-2">{{ tasks.task_name }}</td>
+						<td>{{tasks.task_description}}</td>
+						<td class="col-xs-2">{{ tasks.due_date | date:"D d M"}}</td>
+						<td><a href={% url 'deleteTask' tasks.id %}><button class="btn btn-default btn-success">Done</button></a>
+						<a href={% url 'deleteTask' %}><button class="btn btn-default">Delete</button></a>	
+						</td>
+					</tr>
+					{% endfor %}
+				{% else %}
+					<p>in else, no task display</p>
+				{% endif %}		
+			</table>
+		</div>	
+	</div>
+</script>		
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+#1. user specific task model
+	now irrespective of user logged in, all the tasks are displayed. data of only logged in user should be disalyed
+
+#2. delete task option to user
+	give user the option to delte task
+
+#3.task completed tag
+	whether the task is completed or not
+
+#4. front end design and execution
+	design of layout, html/css part
+	also django forms implemetation
+
+#5. validations at each field, boundry cases handling
+	data entry validations, user authentication before accessing any data
+
+#6. remainder for task
+	integrate with time sync and counter, set remainder by asking date and time and provide remainder service
+
+#7. Refresh after every new task entry
+	as soon as new task is added, the list should be refreshed to show the latest entry
+
