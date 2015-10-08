@@ -71,7 +71,6 @@ def logout_view(request):
 	logout(request)
 	return render(request, 'index.html', {})
 
-'''TODO: deleting task and handling deleted ones'''
 def deleteTask_view(request, task_id):
 	deletedTask = models.Task.objects.get(id = task_id)
 	deletedTask.deleted_flag = 1
@@ -80,6 +79,7 @@ def deleteTask_view(request, task_id):
 	#return HttpResponse(deletedTask.task_name)
 
 def doneTask_view(request, task_id):
+	"""ToDo: not working yet AND handle case for no done task"""
 	doneTask = models.Task.objects.get(id = task_id)
 	doneTask.done_flag = 1
 	doneTask.save()
@@ -87,7 +87,18 @@ def doneTask_view(request, task_id):
 	#return HttpResponseRedirect('userDashboard')
 
 def show_deleted_view(request):
-	deletedTask = models.Task.objects.filter(deleted_flag = 1)
+	deletedTask = models.Task.objects.filter(deleted_flag = 1, user=request.user)
 	context = {'deletedTask':deletedTask }
 	#return HttpResponse(deletedTask.name)
+	"""ToDo: handle case for no deleted task"""
 	return render(request, 'home.html', context)
+
+def todays_task_view(request):
+	"""TODO: figure out how to do this
+	# how get day from due_date of all objects to compare it to datetime.datetime.now().day"""
+	todaysTask = models.Task.objects.filter(due_date=datetime.datetime.now().day)
+	if todaysTask == None:
+		return render(request, 'home.html', {'todaysTask': 'Nothing for today'})
+	context = { 'todaysTask':todaysTask }
+	#return render(request, 'home.html', context)
+	return HttpResponse(todaysTask.task_name)

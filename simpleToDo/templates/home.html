@@ -50,13 +50,17 @@
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
             <li ><a href="#contact">Contact</a></li>
-            <form action="" class="navbar-form navbar-right" role="Search">
+            <!--<form action="" class="navbar-form navbar-right" role="Search">
               <div class="form-group">
                 <input class="form-control" placeholder="Search">
               </div>
               <a href="" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></a>
-            </form>
+            </form>-->
           </ul>
+          <div class="nav navbar-nav" style="margin-top:8px">
+            <button type="button" class="btn btn-default"><a href="">Logout</a></button>  
+          </div>
+          
         </div>
       </div>
 
@@ -78,7 +82,7 @@
         <h3>Hello {{user}}</h3>
         <ul class="nav nav-list narrow">
           <li><a href={% url 'userDashboard' %}>Your Inbox</a></li>
-          <li><a href="#">What for Today</a></li>
+          <li><a href={% url 'todaysTask' %}>What for Today</a></li>
           <li><a href={% url 'showDeleted' %}>Your Deleted</a></li>
           <li><a href="#">Done with</a></li>
         </ul>
@@ -127,10 +131,14 @@
                   <tr>
                     <td>{{forloop.counter}}</td>
                     <td> ID{{tasks.id}} {{ tasks.task_name }} </td>
-                    <td>{{ tasks.task_description }}</td>
-                    <td>{{ tasks.due_date | date:"D d M"}}</td>
-                    <td><a href="task/doneTask/{{tasks.id}}"><span class="glyphicon glyphicon-ok"></span></a> | <a href="task/deleteTask/{{tasks.id}}"><span class="glyphicon glyphicon-trash"></span></a></td>
-                    </tr>
+                    <td>{{ tasks.task_description}}</td>
+                    <td>{{ tasks.due_date | date:"d M, D" }}</td>
+                    <td><a href="task/doneTask/{{tasks.id}}">
+                        <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="left" title="Mark as Done"></span></a> | 
+                        <a href="task/deleteTask/{{tasks.id}}">
+                        <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Delete Task"></span></a>
+                    </td>
+                  </tr>
                   {% endfor %}
                 {% endif %}
               <!--Deleted Tasks-->
@@ -140,8 +148,22 @@
                     <td>{{forloop.counter}}</td>
                     <td> ID{{tasks.id}} {{ tasks.task_name }} </td>
                     <td>{{ tasks.task_description }}</td>
-                    <td>{{ tasks.due_date | date:"D d M"}}</td>
-                    <td><a href="task/doneTask/{{tasks.id}}"><span class="glyphicon glyphicon-ok"></span></a> | <a href="#"><span class="glyphicon glyphicon-remove"></span></a></td>
+                    <td>{{ tasks.due_date | date:"d M, D"}}</td>
+                    <td><a href="task/doneTask/{{tasks.id}}">
+                        <span data-toggle="tooltip" data-placement="bottom" title="Mark as Done" class="glyphicon glyphicon-ok"></span></a> | 
+                        <a href="#" data-toggle="tooltip" data-placement="left" title="Remove from Trash">
+                        <span class="glyphicon glyphicon-remove"></span></a></td>
+                    </tr>
+                  {% endfor %}
+                {% endif %}
+                <!--Today's Task-->
+                {% if todaysTask %}
+                  {% for task in todaysTask %}
+                    <tr>
+                      <td>{{forloop.counter}}</td>
+                      <td> ID{{task.id}} {{ task.task_name }} </td>
+                      <td>{{ task.task_description }}</td>
+                      <td>Today: {{ task.due_date | date:"D d M"}}</td>
                     </tr>
                   {% endfor %}
                 {% endif %}
@@ -154,9 +176,9 @@
                         <div class="col-md-10 align-center">
                           <div class="addTaskEditor">
                             <span>
-                              <input type="text" placeholder="Task name" autocomplete='off' required>
+                              <input type="text" placeholder="Task name-Not working yet" autocomplete='off' required>
                               <input type="text" placeholder="Description" autocomplete='off' required>
-                              <input type="text" placeholder="Due on">
+                              <input type="text" placeholder="Due on-Not working yet">
                               <a class="btn btn-primary">Add</a>
                               <button class="btn btn-default cancelAddTAsk">Cancel</button>
                             </span>
