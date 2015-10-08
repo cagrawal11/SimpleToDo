@@ -141,7 +141,7 @@
                     <td> ID{{tasks.id}} {{ tasks.task_name }} </td>
                     <td>{{ tasks.task_description }}</td>
                     <td>{{ tasks.due_date | date:"D d M"}}</td>
-                    <td><a href="task/doneTask/{{tasks.id}}"><span class="glyphicon glyphicon-ok"></span></a> | <a href="task/deleteTask/{{tasks.id}}"><span class="glyphicon glyphicon-remove"></span></a></td>
+                    <td><a href="task/doneTask/{{tasks.id}}"><span class="glyphicon glyphicon-ok"></span></a> | <a href="#"><span class="glyphicon glyphicon-remove"></span></a></td>
                     </tr>
                   {% endfor %}
                 {% endif %}
