@@ -1,3 +1,93 @@
 body{
-	padding-top: 70px;
+  padding-top: 65px;
+  /*margin-top: 65px;*/
+}
+.nav-top{
+	background: #77A4CB;
+	color: black;
+}
+.right-bar{
+  border-left: 1px solid #ccc;
+}
+.hovering ul li:hover{
+	background-color: #E6E6E6;
+}
+
+.addTaskEditor{
+	display: none;  /*For Javascript display onclick*/
+}
+.addTaskEditor input{
+	margin-left: -3px;
+}
+.addTaskEditor input:nth-child(2){
+	border-left: none;
+	border-right:none;
+}
+.addTaskEditor input{
+	border: 1px solid black;
+}
+table{
+	border-color: gray;
+}
+#addTextField{
+	width: 65%
+}
+.text_box_holder{
+  width: 100%;
+  border-right: 1px solid #eee;
+  background-color: white !important;
+  border: 1px solid #aaa;
+  border-right: none;
+  margin-bottom: 2px;
+  }
+.rich_text_placeholder {
+  display: block;
+  font-family: "Open Sans","Helvetica",Arial,sans-serif;
+  font-size: 13px;
+  position: absolute;
+  color: #ccc;
+  padding: 6px 6px 0 6px;
+  outline: 0;
+  text-align: top
+}
+.due_date_holder{
+	width: 110px
+}
+.richtext_editor {
+  padding-bottom: 4px !important;
+  height: auto !important;
+  line-height: 19px;
+}
+.due_date_holder input {
+  padding: 0 6px;
+  padding-top: 6px;
+  opacity: .5;
+}
+.form_content table {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+}
+td{
+	display: table-cell;
+}
+.cancel{
+	padding: 5px;
+}
+.items{
+	padding: 5px;
+	margin: 0;
+	list-style-type: none;
+}
+/*for editor outside table*/
+.addTaskEditor form{
+  padding-bottom: 20px;
+}
+
+#addTaskDiv{
+  padding-top: 20px;
+}
+.asdf td a{
+  padding-top: -20px;
+  padding-bottom: 20px;
 }

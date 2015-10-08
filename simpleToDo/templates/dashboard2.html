@@ -28,11 +28,20 @@
 	<div class="container-fluid">
 		<div class="well">	
 			<div class="row">
-				<h2 class="col-md-6">SimpleToDo</h2>
+				<div class="col-md-8">
+					<h2>SimpleToDo List</h2>	
+				</div>
+				<div class="col-md-2">
+					Welcome {{user}}
+				</div>
+				<div class="col-md-2">
+					<a href={% url 'logout' %}><button class="btn btn-primary">Logout</button></a>
+				</div>
+				<!--<h2 class="col-md-6">SimpleToDo</h2>
 				<p class="col-md-3">Welcome! {{user}}</p>
 				<div class="col-xs-3">
 					<a href={% url 'logout' %}><button class="btn btn-primary pull-right">Logout</button></a>
-				</div>
+				</div>-->
 			</div>
 		</div>
 	</div>
@@ -67,10 +76,11 @@
 					{% for tasks in allTasks %}
 						<ol class="list-group">
 							<li class="list-group-item">
-								{{ forloop.counter }} {{ tasks.task_name }} {{ tasks.task_description }} 
+								{{ forloop.counter }} {{tasks.id}} {{ tasks.task_name }} {{ tasks.task_description }} Done flag-{{tasks.done_flag}} Deleted-{{tasks.deleted_flag}}
 								<span class="pull-right">{{ tasks.due_date | date:"D d M"}}
-								<a href='#'><button class="btn btn-default btn-success pull-right">Done</button></a>
-								<a href={% url 'deleteTask' tasks.id %}><button class="btn btn-default pull-right">Delete</button></a></span>
+								<a href="task/doneTask/{{tasks.id}}"><button class="btn btn-default btn-success pull-right">Done</button></a>
+								<a href="task/deleteTask/{{tasks.id}}"><button class="btn btn-default pull-right">Delete</button></a></span>
+
 							</li>
 						</ol>
 					{% endfor %}

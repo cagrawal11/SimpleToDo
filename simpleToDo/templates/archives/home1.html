@@ -3,21 +3,22 @@
 <head>
 
 <!-- Latest compiled and minified JavaScript -->
-<script src="/home/chetan/mysite/static/js/jquery-2.1.4.min.js"></script>
-<script src="/home/chetan/mysite/static/js/bootstrap.min.js"></script>
-<!--Own css sheet-->
-<link rel="stylesheet" href="/home/chetan/mysite/static/stylesheet.css  ">
+<script src="../static/js/jquery-2.1.4.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
   <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="/home/chetan/mysite/static/css/bootstrap.min.css">
+<link rel="stylesheet" href="../static/css/bootstrap.min.css">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="/home/chetan/mysite/static/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../static/css/bootstrap-theme.min.css">
+
+<!--Own css sheet-->
+<link rel="stylesheet" href="../static/stylesheet.css  ">
 
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/> 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> 
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
-<title>Try'n Error</title>
+<title>SimpleToDo</title>
 <script> $(document).ready(function() { $("#datepicker").datepicker(); }); </script>
 <script>
   $(document).ready(function(){
@@ -74,20 +75,20 @@
     <div class="col-md-2">
       
       <aside class="sidebar">
-        <h3>Hello Chetan</h3>
+        <h3>Hello {{user}}</h3>
         <ul class="nav nav-list narrow">
-          <li><a href="#">Your Inbox<span class="glyphicon glyphicon-ok pull-right"></span></a></li>
+          <li><a href="#">Your Inbox</a></li>
           <li><a href="#">What for Today</a></li>
           <li><a href="#">Your Deleted</a></li>
-          <li><a href="#">You r Done</a></li>
+          <li><a href="#">You r Done with</a></li>
         </ul>
       </aside>
     </div>
     
-    <div class="col-md-10">
+    <div class="col-md-10 right-bar">
       <div class="row">
         <div class="col-md-4">
-          <h3>Your Dashboard</h3>
+          <h3>Your TaskBox</h3>
         </div>
         <div class="col-md-8">
           <!--<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
@@ -95,6 +96,7 @@
           </button>-->
           <span class="pull-right">
           <form action="addTask" method="POST">
+            {% csrf_token %}
               <div class="form-group">
                 <input type="text" name="task_name" placeholder="Task Name" required>
                 <input type="text" name="task_description" placeholder="Add task" required>
@@ -117,25 +119,59 @@
               <th>Task</th>
               <th>Description</th>
               <th>Due On</th>
+              <th>Done | Delete</th>
             </thead>
             <tbody>
+              {% if allTasks %}
+                  {% for tasks in allTasks %}
+                  <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td> ID{{tasks.id}} {{ tasks.task_name }} </td>
+                    <td>{{ tasks.task_description }}</td>
+                    <td>{{ tasks.due_date | date:"D d M"}}</td>
+                    <td><a href="task/doneTask/{{tasks.id}}"><span class="glyphicon glyphicon-ok"></span></a> | <a href="task/deleteTask/{{tasks.id}}"><span class="glyphicon glyphicon-trash"></span></a></td>
+                    </tr>
+                  {% endfor %}
+                {% endif %}
+              
               <tr>
-                <td>1</td>
-                <td>le task 1</td>
-                <td>le description</td>
-                <td>le Sun 25 Sept</td>
-                <td><a href="#"><span class="glyphicon glyphicon-ok"></span></a> | <a href="#"><span class="glyphicon glyphicon-trash"></span></a></td>
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="row">
+                        <div class="col-md-10 align-center">
+                          <div class="addTaskEditor">
+                            <span>
+                              <input type="text" placeholder="Task name" autocomplete='off' required>
+                              <input type="text" placeholder="Description" autocomplete='off' required>
+                              <input type="text" placeholder="Due on">
+                              <a class="btn btn-primary">Add</a>
+                              <button class="btn btn-default cancelAddTAsk">Cancel</button>
+                            </span>
+                          </div>
+                        </div>
+                      </div>           
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
               </tr>
-              <tr>
-                <td>1</td>
-                <td>le task 1</td>
-                <td>le description</td>
-                <td>le Sun 25 Sept</td>
-                <td><a href="#"><span class="glyphicon glyphicon-ok"></span></a> | <a href="#"><span class="glyphicon glyphicon-trash"></span></a></td>
-              </tr>
-                <div class="addTaskEditor">
-                  <span>
-                    <form action="addTask" method="POST">
+              <tr class="asdf">
+                  <td>
+                   <a id="addTaskDiv"><span class="glyphicon glyphicon-plus"></span> Add Task</a>
+                  </td>
+              </tr> 
+            </tbody>
+          </table>
+        </div> 
+      </div>
+
+              <!--<div class="row">
+                <div class="col-md-8">
+                  <div class="addTaskEditor">
+                    <span>
+                      <form action="addTask" method="POST">
                         <div class="form-group">
                           <input type="text" name="task_name" placeholder="Task Name" required>
                           <input type="text" name="task_description" placeholder="Add task" required>
@@ -145,15 +181,9 @@
                         <button class="btn btn-default cancelAddTAsk">Cancel</button>
                       </form>
                     </span>
-                  </div>
-                <div>
-                 <a href="#" id="addTaskDiv"><span class="glyphicon glyphicon-plus"></span> Add Task</a>
-                </div>
-            </tbody>
-          </table>
-        </div> 
-      </div>
-
+                  </div>                
+                </div>-->
+      <!--
       <div class="row hovering">
         <ul class="list-group">
          <li class="list-group-item">le list task 1<a href="#"><span class="glyphicon glyphicon-trash pull-right"></span></a>
@@ -165,19 +195,31 @@
           <li class="list-group-item">le list task 3<a href="#"><span class="glyphicon glyphicon-trash pull-right"></span></a>
           <a href="#"><span class="glyphicon glyphicon-ok pull-right"></span></a>
           </li>
-        </ul>
-      </div>
-
-      <div class="row">
-        <ul class="nav nav-list">
-          <li><a href="">task 1<span class="glyphicon glyphicon-trash pull-right"></span></a>
+          <li class="list-group-item">le list task 3<a href="#"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+          <a href="#"><span class="glyphicon glyphicon-ok pull-right"></span></a>
           </li>
-          <li><a href="">Task 2<span class="glyphicon glyphicon-trash pull-right"></span></a></li>
-          <li><a href="">Task 3<span class="glyphicon glyphicon-trash pull-right"></span></a></li>
+          <li class="list-group-item">le list task 3<a href="#"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+          <a href="#"><span class="glyphicon glyphicon-ok pull-right"></span></a>
+          </li>
+          <li class="list-group-item">le list task 3<a href="#"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+          <a href="#"><span class="glyphicon glyphicon-ok pull-right"></span></a>
+          </li>
+          <li class="list-group-item">le list task 3<a href="#"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+          <a href="#"><span class="glyphicon glyphicon-ok pull-right"></span></a>
+          </li>
+          <li class="list-group-item">le list task 3<a href="#"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+          <a href="#"><span class="glyphicon glyphicon-ok pull-right"></span></a>
+          </li>
+          <li class="list-group-item">le list task 3<a href="#"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+          <a href="#"><span class="glyphicon glyphicon-ok pull-right"></span></a>
+          </li>
+          <li class="list-group-item">le list task 3<a href="#"><span class="glyphicon glyphicon-trash pull-right"></span></a>
+          <a href="#"><span class="glyphicon glyphicon-ok pull-right"></span></a>
+          </li>
         </ul>
-      </div>
-
-    <!--  <div class="addTaskEditor">
+      </div>-->
+<!--
+      <div class="addTaskEditor">
         <span>
           <form action="addTask" method="POST">
               <div class="form-group">
@@ -190,43 +232,9 @@
            </form>
         </span>
       </div>
-      <div>
-        <a href="#" id="addTaskDiv"><span class="glyphicon glyphicon-plus"></span> Add Task</a>
-      </div>
-      -->
- <!--   <div>
-      <ul class="items">
-        <li>
-          <table class="widhth100%">
-            <tbody>
-              <tr>
-                <td colspan="2" class="form_content"></td>
-                <table>
-                  <tbody>
-                    <tr>
-                      <td class="text_box_holder">
-                      <span class="rich_text_placeholder">Conference wednesday</span> 
-                      <div tabindex="1" withplaceholders="true" contenteditable="true" class="richtext_editor"></div>
-                      </td>
-                      <td class="schedule"><input tabindex="2"  type="text" withplaceholders="true"></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </tr>
-            </tbody>
-          </table>
-          <table>
-            <tbody>
-              <td align="left"><a class="btn btn-default" href="#">Add Task</a></td>
-              <td><a href="" class="cancel">Cancel</a></td>
-            </tbody>
-          </table>
-        </li>
-      </ul>
-    </div>
-    </div>
+   -->
   </div> 
-</div>-->
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

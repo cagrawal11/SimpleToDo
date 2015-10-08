@@ -40,10 +40,13 @@ def signup(request):
 def userDashboard_view(request):
 	#if request.method == 'POST':
 	if request.user.is_authenticated():
-		allTasks = models.Task.objects.filter(user=request.user)
+		#allTasks = models.Task.objects.filter(user=request.user).exclude(done_flag=1, deleted_flag=1)
+		allTasks = models.Task.objects.filter(user=request.user, done_flag=0, deleted_flag=0)
 		context = {'allTasks':allTasks, 'user':request.user.username}
-		return render(request, 'dashboard2.html', context)
+		return render(request, 'home.html', context)
+		#return HttpResponseRedirect('userDashboard')
 	else:
+		'''redirect with user not logged in message'''	
 		return render(request, 'index.html', {})
 
 
@@ -69,8 +72,22 @@ def logout_view(request):
 	return render(request, 'index.html', {})
 
 '''TODO: deleting task and handling deleted ones'''
-def deleteTask_view(request, task_Id):
-	deletedTask = models.Task.objects.get(id = task_Id)
-	deletedTask.delete()
+def deleteTask_view(request, task_id):
+	deletedTask = models.Task.objects.get(id = task_id)
+	deletedTask.deleted_flag = 1
+	deletedTask.save()
 	return HttpResponseRedirect('userDashboard')
 	#return HttpResponse(deletedTask.task_name)
+
+def doneTask_view(request, task_id):
+	doneTask = models.Task.objects.get(id = task_id)
+	doneTask.done_flag = 1
+	doneTask.save()
+	return render(request, 'home.html', {})
+	#return HttpResponseRedirect('userDashboard')
+
+def show_deleted_view(request):
+	deletedTask = models.Task.objects.filter(deleted_flag = 1)
+	context = {'deletedTask':deletedTask }
+	#return HttpResponse(deletedTask.name)
+	return render(request, 'home.html', context)

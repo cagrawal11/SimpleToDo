@@ -12,5 +12,7 @@ urlpatterns = patterns('',
     url(r'^userDashboard$', views.userDashboard_view, name='userDashboard'),
     url(r'^addTask$', views.addTask_view, name='addTask'),
     url(r'^logout$', views.logout_view, name='logout'),
-    url(r'^(?P<task_Id>[0-9]+)$', views.deleteTask_view, name='deleteTask'),
+    url(r'^task/doneTask/(?P<task_id>[0-9]+)$', views.doneTask_view, name='doneTask_view'),
+    url(r'^task/deleteTask/(?P<task_id>[0-9]+)$', views.deleteTask_view, name='deleteTask'),
+    url(r'^showDeleted$', views.show_deleted_view, name='showDeleted'),
 )
