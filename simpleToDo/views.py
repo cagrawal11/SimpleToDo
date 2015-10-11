@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 import models, datetime
 #from datetime import datetime
@@ -18,10 +19,11 @@ def signin(request):
 		if user is not None:
 			login(request, user)
 			#return render(request, 'index.html', {})
+			messages.success(request, "logged In success")
 			return HttpResponseRedirect('userDashboard')
 		else: 
-			'''TODO: return appropriate response for unsuccessfull login'''
-			return HttpResponse("Na na") 
+			messages.error(request, "Invalid Username or Password")
+			return render(request, 'index.html', {})
 
 def signup(request):
 	if request.method == 'POST':
@@ -37,6 +39,7 @@ def signup(request):
 			return HttpResponseRedirect('userDashboard')
 
 #@login_required
+'''
 def userDashboard_view(request):
 	#if request.method == 'POST':
 	if request.user.is_authenticated():
@@ -46,9 +49,20 @@ def userDashboard_view(request):
 		return render(request, 'home.html', context)
 		#return HttpResponseRedirect('userDashboard')
 	else:
-		'''redirect with user not logged in message'''	
+		#redirect with user not logged in message
+		messages.error(request, "User not logged in")
 		return render(request, 'index.html', {})
-
+'''
+def userDashboard_view(request):
+	if request.user.is_authenticated():
+		#allTasks = models.Task.objects.filter(user=request.user).exclude(done_flag=1, deleted_flag=1)
+		allTasks = models.Task.objects.filter(user=request.user, done_flag=0, deleted_flag=0)
+		context = {'TaskList':allTasks, 'user':request.user.username, 'allTasks':'allTasks'}
+		return render(request, 'home.html', context)
+	else:
+		#redirect with user not logged in message
+		messages.error(request, "User not logged in")
+		return render(request, 'index.html', {})
 
 #@login_required
 def addTask_view(request):
@@ -58,6 +72,7 @@ def addTask_view(request):
 			task_description = request.POST['task_description']
 			due_date = datetime.datetime.strptime(request.POST['due_date'], '%m/%d/%Y')
 			user = request.user
+			#dueOn = datetime.datetime.strptime(request.POST['due_date'], '%m/%d')
 			'''TODO: take selected date instead of datetime.datetime.now()'''
 			taskData = models.Task(task_name = task_name, task_description=task_description, 
 									task_created=datetime.datetime.now(), due_date=due_date, user=user)
@@ -75,30 +90,33 @@ def deleteTask_view(request, task_id):
 	deletedTask = models.Task.objects.get(id = task_id)
 	deletedTask.deleted_flag = 1
 	deletedTask.save()
-	return HttpResponseRedirect('userDashboard')
+	return HttpResponseRedirect('/userDashboard')
 	#return HttpResponse(deletedTask.task_name)
 
 def doneTask_view(request, task_id):
-	"""ToDo: not working yet AND handle case for no done task"""
 	doneTask = models.Task.objects.get(id = task_id)
 	doneTask.done_flag = 1
 	doneTask.save()
-	return render(request, 'home.html', {})
-	#return HttpResponseRedirect('userDashboard')
+	#return render(request, 'home.html', {})
+	return HttpResponseRedirect('/userDashboard')
 
 def show_deleted_view(request):
 	deletedTask = models.Task.objects.filter(deleted_flag = 1, user=request.user)
-	context = {'deletedTask':deletedTask }
-	#return HttpResponse(deletedTask.name)
+	context = {'TaskList':deletedTask, 'deleted':'deleted' }
 	"""ToDo: handle case for no deleted task"""
 	return render(request, 'home.html', context)
 
-def todays_task_view(request):
-	"""TODO: figure out how to do this
-	# how get day from due_date of all objects to compare it to datetime.datetime.now().day"""
-	todaysTask = models.Task.objects.filter(due_date=datetime.datetime.now().day)
+def show_today_view(request):
+	todayDate = datetime.datetime.now()
+	str(todayDate)
+	todayDate.strftime('%m/%d/%Y')
+	todaysTask = models.Task.objects.get(due_date=todayDate)
 	if todaysTask == None:
-		return render(request, 'home.html', {'todaysTask': 'Nothing for today'})
+		return render(request, 'home.html', {})
 	context = { 'todaysTask':todaysTask }
-	#return render(request, 'home.html', context)
-	return HttpResponse(todaysTask.task_name)
+	return render(request, 'home.html', context)
+
+def show_doneTask_view(request):
+	doneTask = models.Task.objects.filter(done_flag=1, user=request.user)
+	context = {'TaskList': doneTask, 'done':'done'}
+	return render(request, 'home.html', context)

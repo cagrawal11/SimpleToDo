@@ -15,5 +15,6 @@ urlpatterns = patterns('',
     url(r'^task/doneTask/(?P<task_id>[0-9]+)$', views.doneTask_view, name='doneTask_view'),
     url(r'^task/deleteTask/(?P<task_id>[0-9]+)$', views.deleteTask_view, name='deleteTask'),
     url(r'^showDeleted$', views.show_deleted_view, name='showDeleted'),
-    url(r'^todaysTask$', views.todays_task_view, name='todaysTask'),
+    url(r'^showDoneTask$', views.show_doneTask_view, name='showDoneTask'),
+    url(r'^showToday$', views.show_today_view, name='showToday'),
 )

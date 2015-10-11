@@ -12,3 +12,4 @@ class Task(models.Model):
 	due_date = models.DateTimeField(default=None)
 	deleted_flag = models.IntegerField(default=0)
 	done_flag = models.IntegerField(default=0)
+	#dueOn = models.DateField(default=None)

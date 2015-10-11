@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../static/css/bootstrap-theme.min.css">
 
 <!--Own css sheet-->
-<link rel="stylesheet" href="../static/stylesheet.css">
+<link rel="stylesheet" href="../static/stylesheet.css  ">
 
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/> 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> 
@@ -58,13 +58,20 @@
             </form>-->
           </ul>
           <div class="nav navbar-nav" style="margin-top:8px">
-            <button type="button" class="btn btn-default"><a href={% url 'logout' %}>Logout</a></button>  
+            <button type="button" class="btn btn-default"><a href="">Logout</a></button>  
           </div>
           
         </div>
       </div>
 
     </nav> 
+    <!--
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Your ToDo app</h1>
+        <h3>Simply make a list to track all the tasks u wanna do</h3>
+      </div>
+    </div> -->
 </header>
 
 <div class="container">
@@ -75,7 +82,7 @@
         <h3>Hello {{user}}</h3>
         <ul class="nav nav-list narrow">
           <li><a href={% url 'userDashboard' %}>Your Inbox</a></li>
-          <li><a href={% url 'showToday' %}>What for Today</a></li>
+          <li><a href={% url 'todaysTask' %}>What for Today</a></li>
           <li><a href={% url 'showDeleted' %}>Your Deleted</a></li>
           <li><a href={% url 'showDoneTask' %}>Done with</a></li>
         </ul>
@@ -105,72 +112,50 @@
            </span>
         </div>
       </div>
-      <div class="row">
-        {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-                {% if 'success' in message.tags %}
 
-        <div class="alert alert-success">
-            <a class="close" href="#" data-dismiss="alert">×</a>
-            <strong>Success!</strong>
-
-                {{ message }}
-
-        </div>
-    {% endif %}
-            <!--<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>-->
-          {% endfor %}
-        </ul>
-        {% endif %}  
-      </div>
       <div class="row">
       <!--Table display-->
        <div class="col-md-12">
           <h4>Task</h4>
           <table class="table table-hover" cellpadding="0" cellspacing="0">
-            {% if TaskList %}
-                <thead> 
-                  <th>#</th>
-                  <th>Task Name</th>
-                  <th>Description</th>
-                  <th>Due On</th>
-                  <th>Actions</th>
-                </thead>
-                <tbody>
-                  {% for tasks in TaskList %}
-                    <tr>
-                      <td>{{forloop.counter}}</td>
-                      <td class="TableTaskName"> ID{{tasks.id}} {{ tasks.task_name }} </td>
-                      <td class="TableTaskDescription">{{ tasks.task_description}}</td>
-                      <td>{{ tasks.due_date | date:"d M, D" }}</td>
-                      {% if allTasks %}
-                      <td><a href="task/doneTask/{{tasks.id}}">
-                          <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="left" title="Mark as Done"></span></a> | 
-                          <a href="task/deleteTask/{{tasks.id}}">
-                          <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Delete Task"></span></a>
-                      </td>
-                    </tr>
-                    {% endif %}
-                    <!--For deleted-->
-                    {% if deleted %}
-                        <td>
-                          <a href="task/doneTask/{{tasks.id}}">
-                          <span data-toggle="tooltip" data-placement="bottom" title="Mark as Done" class="glyphicon glyphicon-ok"></span></a> | 
-                          <a href="#" data-toggle="tooltip" data-placement="left" title="Remove from Trash">
-                          <span class="glyphicon glyphicon-remove"></span></a>
-                        </td>
-                    {% endif %}
-                    <!--Done Task Actions-->
-                    {% if done %}
-                      <td>
+            <thead>
+              <th>#</th>
+              <th>Task</th>
+              <th>Description</th>
+              <th>Due On</th>
+              <th>Actions</th>
+            </thead>
+            <tbody>
+              {% if allTasks %}
+                  {% for tasks in allTasks %}
+                  <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td> ID{{tasks.id}} {{ tasks.task_name }} </td>
+                    <td>{{ tasks.task_description}}</td>
+                    <td>{{ tasks.due_date | date:"d M, D" }}</td>
+                    <td><a href="task/doneTask/{{tasks.id}}">
+                        <span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="left" title="Mark as Done"></span></a> | 
                         <a href="task/deleteTask/{{tasks.id}}">
                         <span class="glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="left" title="Delete Task"></span></a>
-                      </td>
-                    </tr>
-                    {% endif %}
+                    </td>
+                  </tr>
                   {% endfor %}
-
+                {% endif %}
+              <!--Deleted Tasks-->
+              {% if deletedTask %}
+                  {% for tasks in deletedTask %}
+                  <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td> ID{{tasks.id}} {{ tasks.task_name }} </td>
+                    <td>{{ tasks.task_description }}</td>
+                    <td>{{ tasks.due_date | date:"d M, D"}}</td>
+                    <td><a href="task/doneTask/{{tasks.id}}">
+                        <span data-toggle="tooltip" data-placement="bottom" title="Mark as Done" class="glyphicon glyphicon-ok"></span></a> | 
+                        <a href="#" data-toggle="tooltip" data-placement="left" title="Remove from Trash">
+                        <span class="glyphicon glyphicon-remove"></span></a></td>
+                    </tr>
+                  {% endfor %}
+                {% endif %}
                 <!--Today's Task-->
                 {% if todaysTask %}
                   {% for task in todaysTask %}
@@ -182,9 +167,17 @@
                     </tr>
                   {% endfor %}
                 {% endif %}
-
-            {% endif %}
-
+                <!--Done Tasks-->
+                {% if doneTask %}
+                  {% for task in doneTask %}
+                    <tr>
+                      <td>{{forloop.counter}}</td>
+                      <td> ID{{task.id}} {{ task.task_name }} </td>
+                      <td>{{ task.task_description }}</td>
+                      <td>Today: {{ task.due_date | date:"D d M"}}</td>
+                    </tr>
+                  {% endfor %}
+                {% endif %}
               <tr>
               <table class="table">
                 <tbody>
@@ -214,7 +207,7 @@
                   </td>
               </tr> 
             </tbody>
-          </table>          
+          </table>
         </div> 
       </div>
 
@@ -282,7 +275,6 @@
               <button class="btn btn-default cancelAddTAsk">Cancel</button>
            </form>
         </span>
-
       </div>
    -->
   </div> 

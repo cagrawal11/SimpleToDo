@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../static/css/bootstrap-theme.min.css">
 
 <!--Own css sheet-->
-<link rel="stylesheet" href="../static/stylesheet.css">
+<link rel="stylesheet" href="../static/stylesheet.css  ">
 
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/> 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script> 
@@ -65,6 +65,13 @@
       </div>
 
     </nav> 
+    <!--
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Your ToDo app</h1>
+        <h3>Simply make a list to track all the tasks u wanna do</h3>
+      </div>
+    </div> -->
 </header>
 
 <div class="container">
@@ -105,25 +112,7 @@
            </span>
         </div>
       </div>
-      <div class="row">
-        {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-                {% if 'success' in message.tags %}
 
-        <div class="alert alert-success">
-            <a class="close" href="#" data-dismiss="alert">×</a>
-            <strong>Success!</strong>
-
-                {{ message }}
-
-        </div>
-    {% endif %}
-            <!--<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>-->
-          {% endfor %}
-        </ul>
-        {% endif %}  
-      </div>
       <div class="row">
       <!--Table display-->
        <div class="col-md-12">
@@ -214,7 +203,7 @@
                   </td>
               </tr> 
             </tbody>
-          </table>          
+          </table>
         </div> 
       </div>
 
@@ -282,7 +271,6 @@
               <button class="btn btn-default cancelAddTAsk">Cancel</button>
            </form>
         </span>
-
       </div>
    -->
   </div> 

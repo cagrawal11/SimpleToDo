@@ -29,6 +29,12 @@ body{
 table{
 	border-color: gray;
 }
+.TableTaskName{
+  width: 30%;
+}
+.TableTaskDescription{
+  width: 40%;
+}
 #addTextField{
 	width: 65%
 }
